@@ -12,9 +12,9 @@ def random_color():
     b = random.randint(0,255)
     return (g, r, b)
 
-counter = Display(270, 28, 8)
-val = 0
+counter = Display(270, 28, 8, "clock")    # clock mode means show 01:01 instead of 00:61
+SECS = 55
 while True :
-    counter.show(val, 0, color = random_color() )
+    counter.show(SECS, 1, color = random_color() )
     time.sleep(1.0)
-    val = (val + 1) % 10000
+    SECS = (SECS + 1) % 10000

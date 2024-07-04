@@ -8,12 +8,14 @@ blue =  (0,     0, 255)
 
 class Display:
     """Display object to interact with the custom 4 char LED strip display"""
-    def __init__(self, numpix, gpiopin, side):
+
+    def __init__(self, numpix, gpiopin, side, mode = "clock"):
         self.numpix = numpix
         self.gpiopin = gpiopin
         print("numpix=", self.numpix,", gpiopin = ", self.gpiopin)
         self.pixels = Neopixel(self.numpix, 0, self.gpiopin, "GRB")
         self.side = 8
+        self.mode = mode
         self.segments = {
             "ones": {
                 0: [(8,8+6*side-1),],
@@ -64,9 +66,19 @@ class Display:
             }
         }
 
+    @classmethod
+    def sec2minsec(cls, sec):
+        """ given a number of seconds, convert to minutes and seconds """
+        m = int(sec / 60)
+        s = (sec - (m * 60)) % 60
+        return (m * 100) + s
+
     def show(self, num, colon, color=blue, brightness=100):
         """ set the four numeric chars to a value."""
         self.pixels.clear()
+
+        if self.mode == "clock":
+            num = Display.sec2minsec(num)
 
         if num < 5:
             color = red
