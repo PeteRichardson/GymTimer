@@ -1,0 +1,19 @@
+set shell := ["nu", "-c"]
+set positional-arguments
+
+deploy: clean create_dir copy
+
+clean:
+    cd {{justfile_directory()}}; rm -rf deploy
+
+create_dir:
+    cd {{justfile_directory()}}; mkdir deploy
+
+copy:
+    cd {{justfile_directory()}}; cp main.py deploy/
+    cd {{justfile_directory()}}; cp neopixel.py deploy/
+    cd {{justfile_directory()}}; cp display.py deploy/
+    cd {{justfile_directory()}}; cp board.py deploy/
+
+rsync:
+    cd {{justfile_directory()}}; rshell --quiet rsync deploy/ /pico
